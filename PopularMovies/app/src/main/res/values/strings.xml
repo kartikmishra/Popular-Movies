@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="toolbarTitle">Popular Movies</string>
+    <string name="popular">popularity</string>
+    <string name="trending">Trending</string>
+    <string name="topRated">Top rated</string>
+    <string name="setting">Settings</string>
+    <string name="pref_top_rated_value">Top rated</string>
+    <string name="pref_popular_value">Popularity</string>
+    <string name="pref_sorting_criteria_key">sorting_criteria</string>
+    <string name="pref_sorting_criteria_default_value">popularity</string>
+    <string name="appbar_scrolling_view_behavior">vertical</string>
+
+    <string name="popularity">popularity</string>
+    <string name="vote_average">vote_average</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="highest_rated">Highest Rated</string>
+    <string name="desc">Description</string>
+    <string name="recyclerViewImage">Recycler View Image</string>
+    <string name="detailActivityImage">Details Activity Image</string>
+    <string name="back">Back Arrow</string>
+    <string name="btn_tryAgain">Try Again</string>
+    <string name="detail_activity_toolbar_name">Details</string>
+    <string name="releaseDate">Release Date</string>
+    <string name="rating">Rating</string>
+    <string name="plotSynopsis">A plot synopsis</string>
+</resources>

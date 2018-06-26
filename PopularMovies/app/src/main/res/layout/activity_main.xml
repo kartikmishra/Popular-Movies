@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/relLayout1">
+
+
+   <android.support.v7.widget.Toolbar
+     android:layout_width="match_parent"
+     android:layout_height="?android:attr/actionBarSize"
+       android:id="@+id/toolBar"
+       android:background="@color/grey_800"
+       app:title="Pop Movies"
+       app:titleTextColor="@color/white">
+
+
+
+   </android.support.v7.widget.Toolbar>
+
+
+      <ImageView
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:layout_alignParentEnd="true"
+          android:layout_marginEnd="15dp"
+          android:id="@+id/iv_settings"
+          android:layout_marginTop="11sp"
+          android:src="@drawable/ic_settingsa"/>
+
+   </RelativeLayout>
+
+
+   <android.support.v7.widget.RecyclerView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/rv_movies"
+       android:scrollbars="vertical"
+       android:layout_below="@+id/relLayout1">
+
+
+
+
+   </android.support.v7.widget.RecyclerView>
+
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:gravity="center">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:id="@+id/networkConnection"
+          android:textSize="20sp"
+          android:textStyle="italic"
+         />
+
+       <Button
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/btn_tryAgain"
+           android:layout_below="@+id/networkConnection"
+           android:gravity="center"
+           android:id="@+id/tryNetworkConnectionBtn"
+           android:layout_centerVertical="true"
+           android:layout_marginStart="50dp"
+           android:visibility="invisible"/>
+
+
+   </RelativeLayout>
+
+
+
+
+</RelativeLayout>
