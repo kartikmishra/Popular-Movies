@@ -6,7 +6,7 @@ public class Constants {
         public final static String MOVIE_TAG = "MOVIE";
 
         public final static class APIConstants{
-            public static final String BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
+            public static final String BASE_URL = "https://api.themoviedb.org/3/movie";
             public static final String APP_KEY_QUERY_PARAM = "api_key";
             public static final String SORT_POPULARITY = "popularity.desc";
             public static final String SORT_RATING = "vote_average.desc";
