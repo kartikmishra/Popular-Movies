@@ -7,8 +7,7 @@ Popular movies app lets you search all the popular and  the top rated movies and
 
 
 ![alt text](SS1.png "Main Page")
-![alt text](SS2.png "Page to sort the data")
-![alt text](SS3.png "Another sorted data on the mainscreen")
-![alt text](SS4.png "Detail page to see the overview,release date,etc")
+![alt text](SS2.png "Detail page to see the overview,release date,etc")
+![alt text](SS3.png "Page to sort the data")
 
 
