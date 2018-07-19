@@ -12,9 +12,11 @@
     <string name="appbar_scrolling_view_behavior">vertical</string>
 
     <string name="popularity">popular</string>
-    <string name="vote_average">top_rated</string>
+    <string name="top_rated">top_rated</string>
+    <string name="fav_key">fav</string>
     <string name="most_popular">Most Popular</string>
     <string name="highest_rated">Highest Rated</string>
+    <string name="label_fav">Favourite</string>
     <string name="desc">Description</string>
     <string name="recyclerViewImage">Recycler View Image</string>
     <string name="detailActivityImage">Details Activity Image</string>
@@ -24,4 +26,7 @@
     <string name="releaseDate">Release Date</string>
     <string name="rating">Rating</string>
     <string name="plotSynopsis">A plot synopsis</string>
+    <string name="average_rating">Average Rating :</string>
+    <string name="added_to_fav">Added to favourites!</string>
+    <string name="removed_from_fav">Removed from favourites</string>
 </resources>

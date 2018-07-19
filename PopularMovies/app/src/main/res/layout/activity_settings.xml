@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".Settings.SettingsActivity">
 
 
-   <android.support.v7.widget.Toolbar
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       app:title="Settings"
-       app:titleTextColor="@color/white"
-       android:background="@color/grey_800"
-       android:id="@+id/toolbar_gy">
 
-   </android.support.v7.widget.Toolbar>
 
     <include layout="@layout/content_settings"/>
 
-   </android.support.constraint.ConstraintLayout>
+   </RelativeLayout>

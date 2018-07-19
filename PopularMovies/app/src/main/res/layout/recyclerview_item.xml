@@ -1,19 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="300dp">
-    
-    
-    <ImageView
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="310dp"
+    android:orientation="vertical"
+    android:layout_marginStart="4dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginEnd="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/recyclerViewImage"
-        android:id="@+id/movies_iv"
-        android:src="@color/grey_800"/>
+        android:id="@+id/cardView"
+        app:cardCornerRadius="4dp"
+        android:layout_marginBottom="2dp"
+        app:cardElevation="40dp">
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:contentDescription="@string/recyclerViewImage"
+            android:id="@+id/movies_iv"/>
 
 
 
-</RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
+</LinearLayout>
+
+
+

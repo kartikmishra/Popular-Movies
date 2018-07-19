@@ -3,12 +3,14 @@
 
     <string-array name="pref_sorting_criteria_keys">
         <item>@string/popularity</item>
-        <item>@string/vote_average</item>
+        <item>@string/top_rated</item>
+        <item>@string/fav_key</item>
     </string-array>
 
     <string-array name="pref_sorting_criteria_values">
         <item>@string/most_popular</item>
         <item>@string/highest_rated</item>
+        <item>@string/label_fav</item>
     </string-array>
 
 
