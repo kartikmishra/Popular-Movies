@@ -80,20 +80,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     }
 
 
-    public void add(Videos object) {
-        synchronized (videos) {
-            mTrailers.add(object);
-        }
-        notifyDataSetChanged();
-    }
-
-    public void clear() {
-        synchronized (videos) {
-            mTrailers.clear();
-        }
-        notifyDataSetChanged();
-    }
-
 
     class TrailerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TrailerAdapterViewHolder(View itemView) {

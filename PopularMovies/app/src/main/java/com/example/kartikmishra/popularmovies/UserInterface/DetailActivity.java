@@ -38,7 +38,6 @@ import com.example.kartikmishra.popularmovies.Constants;
 import com.example.kartikmishra.popularmovies.NetworksUtils.FetchMoviesAsyncTask;
 import com.example.kartikmishra.popularmovies.NetworksUtils.HttpHandler;
 import com.example.kartikmishra.popularmovies.R;
-import com.example.kartikmishra.popularmovies.Utility;
 import com.example.kartikmishra.popularmovies.data.MoviesContract;
 import com.example.kartikmishra.popularmovies.models.Movies;
 import com.example.kartikmishra.popularmovies.models.Reviews;
