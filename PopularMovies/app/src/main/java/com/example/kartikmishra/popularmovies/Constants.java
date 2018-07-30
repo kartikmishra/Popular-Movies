@@ -23,6 +23,6 @@ public class Constants {
             public static final String REVIEW_PARAM = "reviews";
             public static final String API_POSTER_SIZE = "w185/";
             public static final String API_KEY_PARAM = "api_key";
-            public static final String THE_MOVIE_DB_API_KEY = "5cf2ad47540f022c1822cc45594e268b";
+            public static final String THE_MOVIE_DB_API_KEY = "";
         }
 }
