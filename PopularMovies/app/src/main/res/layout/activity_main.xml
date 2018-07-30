@@ -16,9 +16,10 @@
      android:layout_width="match_parent"
      android:layout_height="?android:attr/actionBarSize"
        android:id="@+id/toolBar"
-       android:background="@color/grey_800"
+       android:background="@color/colorPrimary"
        app:title="Pop Movies"
-       app:titleTextColor="@color/white">
+       app:titleTextColor="@color/white"
+       android:theme="@style/ToolbarTheme">
 
 
 
@@ -29,10 +30,10 @@
           android:layout_width="30dp"
           android:layout_height="30dp"
           android:layout_alignParentEnd="true"
-          android:layout_marginEnd="15dp"
+          android:layout_marginEnd="10dp"
           android:id="@+id/iv_settings"
-          android:layout_marginTop="11sp"
-          android:src="@drawable/ic_settingsa"/>
+          android:layout_marginTop="14sp"
+          android:src="@drawable/ic_dashboard"/>
 
    </RelativeLayout>
 
@@ -40,6 +41,7 @@
    <android.support.v7.widget.RecyclerView
        android:layout_width="match_parent"
        android:layout_height="match_parent"
+       android:background="@color/baige"
        android:id="@+id/rv_movies"
        android:scrollbars="vertical"
        android:layout_below="@+id/relLayout1">

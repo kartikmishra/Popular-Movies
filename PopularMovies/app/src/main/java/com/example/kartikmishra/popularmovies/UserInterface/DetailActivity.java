@@ -1,34 +1,41 @@
 package com.example.kartikmishra.popularmovies.UserInterface;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ParseException;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
-import android.support.v7.app.ActionBar;
+
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.MenuItem;
+
 import android.view.View;
-import android.widget.Adapter;
+
+
 import android.widget.ImageView;
-import android.widget.ListAdapter;
+
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
+
 
 import com.example.kartikmishra.popularmovies.Adapters.MoviesAdapter;
 import com.example.kartikmishra.popularmovies.Adapters.ReviewAdapter;
 import com.example.kartikmishra.popularmovies.Adapters.TrailerAdapter;
 import com.example.kartikmishra.popularmovies.Constants;
+import com.example.kartikmishra.popularmovies.NetworksUtils.FetchMoviesAsyncTask;
 import com.example.kartikmishra.popularmovies.NetworksUtils.HttpHandler;
 import com.example.kartikmishra.popularmovies.R;
 import com.example.kartikmishra.popularmovies.Utility;
@@ -36,34 +43,38 @@ import com.example.kartikmishra.popularmovies.data.MoviesContract;
 import com.example.kartikmishra.popularmovies.models.Movies;
 import com.example.kartikmishra.popularmovies.models.Reviews;
 import com.example.kartikmishra.popularmovies.models.Videos;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-
-import static com.example.kartikmishra.popularmovies.NetworksUtils.FetchMoviesAsyncTask.getJson;
-import static com.example.kartikmishra.popularmovies.R.id.recyclerView_trailers;
-import static com.example.kartikmishra.popularmovies.R.id.trailer_iv;
+import java.util.Set;
 
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.ListItemClickListener {
     private static final String TAG = "DetailActivity";
 
-    private ImageView backIv;
     private ImageView poster_image_big;
     private ImageView poster_image_small;
     private TextView movieTitle;
     private TextView releaseDate;
-    private TextView vote_average;
+    private RatingBar vote_average;
     private TextView overView;
     public static Movies mMovies;
-    private ImageView fav_btn;
+    public static ImageView fav_btn;
     public static Intent intent;
     private RecyclerView mRecyclerViewTrailer;
     private RecyclerView mRecyclerViewReview;
@@ -71,43 +82,41 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     TrailerAdapter trailerAdapter;
     ReviewAdapter  reviewAdapter;
     public static ArrayList<String> keys = new ArrayList<>();
+    private Context mContext;
 
     public static List<Videos> videoList = new ArrayList<>();
     public static List<Reviews> reviewsList = new ArrayList<>();
+    public static List<Long> id = new ArrayList<>();
     final boolean[] fav_red_image = {false};
     Toast mToast;
+    public final int isfav=0;
 
     android.support.v7.widget.Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-//        if(savedInstanceState != null && savedInstanceState.containsKey("trailers") &&
-//                savedInstanceState.containsKey("reviews")) {
-//            keys = savedInstanceState.getStringArrayList("keys");
-//            videoList = savedInstanceState.getParcelableArrayList("trailers");
-//            reviewsList = savedInstanceState.getParcelableArrayList("reviews");
-//        }else{
-//            videoList=new ArrayList<>();
-//            keys = new ArrayList<>();
-//            reviewsList = new ArrayList<>();
-//            trailerAdapter = new TrailerAdapter(getApplicationContext());
-//            reviewAdapter = new ReviewAdapter(getApplicationContext());
-//            updateMovies();
-//        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
 
 
-
+        ImageView back = findViewById(R.id.backarrow);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                return;
+            }
+        });
+        mContext = getApplicationContext();
         DetailActivity.intent = getIntent();
-
 
         init();
 
-
-
         mMovies = new Movies();
+        String sortingCriteria = intent.getStringExtra("sorting");
+        if(sortingCriteria.contentEquals("fav")){
+            fav_btn.setVisibility(View.INVISIBLE);
+        }
 
         int moviePosition1 = intent.getIntExtra("movies_position", 0);
         mMovies = MainActivity.list.get(moviePosition1);
@@ -119,6 +128,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         setUpReviewRecyclerView();
 
 
+        TextView toolbarName = findViewById(R.id.tv_detail_toolbar_name);
+        toolbarName.setText(mMovies.getTitle());
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -147,44 +158,70 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         movieTitle.setText(mMovies.getTitle());
 
         Double average = mMovies.getVote_average();
-        String finalAverage = Double.toString(average);
+        String finalAverage = Double.toString(average/2);
 
-        vote_average.setText("Average Rating:"+finalAverage + "/10");
-
+        vote_average.setNumStars(5);
+        vote_average.setRating(Float.parseFloat(finalAverage));
 
         overView.setText(mMovies.getOverView());
 
 
 
-//        backIv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//
-//            }
-//        });
+
+
+
+        new  AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                Cursor cursor = getApplicationContext().getContentResolver().query(
+                        MoviesContract.MoviesEntry.CONTENT_URI,
+                        null,   // projection
+                        MoviesContract.MoviesEntry.COLUMN__MOVIES_ID + " = ?", // selection
+                        new String[]{Integer.toString((int) mMovies.getMovie_ID())},   // selectionArgs
+                        null    // sort order
+
+                );
+
+
+                boolean isfav = false;
+
+                if(cursor!=null&&cursor.moveToFirst()){
+                    do {
+                        if(cursor.getLong(MainActivity.COL_MOVIE_ID)==mMovies.getMovie_ID()){
+                            isfav=true;
+                        }
+                        else if(cursor.isNull(MainActivity.COL_MOVIE_ID)) {
+                            isfav = false;
+                        }
+                    }while (cursor.moveToNext());
+
+                    cursor.close();
+                }
+
+                return isfav;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+
+                if (aBoolean == true) {
+                    fav_btn.setImageResource(R.drawable.favsymbolred);
+                }
+                else {
+                    fav_btn.setImageResource(R.drawable.favsymboldark);
+                }
+
+            }
+        }.execute();
+
 
 
         setUpFavButton();
 
+
     }
 
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//
-//        outState.putStringArrayList("keys",DetailActivity.keys);
-//        outState.putParcelableArrayList("reviews", (ArrayList<? extends Parcelable>) DetailActivity.reviewsList);
-//        outState.putParcelableArrayList("trailers", (ArrayList<? extends Parcelable>) DetailActivity.videoList);
-//        super.onSaveInstanceState(outState);
-//    }
 
-    public  void updateMovies(){
-        if(mMovies!=null){
-
-            new fetchReviewTask().execute(String.valueOf(mMovies.getMovie_ID()));
-            new fetchTrailerAsyncTask().execute(String.valueOf(mMovies.getMovie_ID()));
-        }
-    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -195,82 +232,84 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
            // adapter.notifyDataSetChanged();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if(movies!=null){
-//            new fetchTrailerAsyncTask().execute(String.valueOf(movies.getMovie_ID()));
-//
-//            new fetchReviewTask().execute(String.valueOf(movies.getMovie_ID()));
-//            // adapter.notifyDataSetChanged();
-//        }
-//    }
+    /**
+     * Setting Up Fav Button Here
+     */
 
 
-
-    public void setUpFavButton(){
-
+    public void setUpFavButton() {
         fav_btn.setImageResource(R.drawable.favsymboldark);
 
-        new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... voids) {
-                return Utility.isFavorited(getApplicationContext(), (int) mMovies.getMovie_ID());
-            }
+        boolean[] isFav={false};
+
+       new AsyncTask<Void,Void,Boolean>() {
 
             @Override
-            protected void onPostExecute(Integer integer) {
+            protected Boolean doInBackground(Void... voids) {
+                Cursor cursor = getApplicationContext().getContentResolver().query(
+                        MoviesContract.MoviesEntry.CONTENT_URI,
+                        null,   // projection
+                        MoviesContract.MoviesEntry.COLUMN__MOVIES_ID + " = ?", // selection
+                        new String[]{Integer.toString((int) mMovies.getMovie_ID())},   // selectionArgs
+                        null    // sort order
 
-                fav_btn.setImageResource(integer==1 ?
-                R.drawable.favsymbolred:R.drawable.favsymboldark);
-            }
-        };
-
-
-        fav_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mMovies!=null){
-
-                    new AsyncTask<Void,Void,Integer>(){
+                );
 
 
-                        @Override
-                        protected Integer doInBackground(Void... voids) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                return Utility.isFavorited(getApplicationContext(), Math.toIntExact(mMovies.getMovie_ID()));
-                            }
-                            return null;
+                boolean isfav = false;
+
+                if (cursor != null && cursor.moveToFirst()) {
+                    do {
+                        if (cursor.getLong(MainActivity.COL_MOVIE_ID) == mMovies.getMovie_ID()) {
+                            isfav = true;
+                        } else if (cursor.isNull(MainActivity.COL_MOVIE_ID)) {
+                            isfav = false;
                         }
 
-                        @Override
-                        protected void onPostExecute(Integer integer) {
-                            if(integer==1){
+                    } while (cursor.moveToNext());
 
-                                new AsyncTask<Void, Void, Integer>() {
-                                    @Override
-                                    protected Integer doInBackground(Void... voids) {
-                                        return getBaseContext().getContentResolver().delete(MoviesContract.MoviesEntry.CONTENT_URI,
-                                                MoviesContract.MoviesEntry.COLUMN__MOVIES_ID + "= ?",
-                                                new String[]{Integer.toString((int) mMovies.getMovie_ID())});
-                                    }
 
-                                    @Override
-                                    protected void onPostExecute(Integer integer) {
-                                        fav_btn.setImageResource(R.drawable.favsymboldark);
-                                        if(mToast!=null){
-                                            mToast = Toast.makeText(getApplicationContext(),R.string.removed_from_fav,Toast.LENGTH_LONG);
-                                            mToast.show();
-                                        }
-                                    }
-                                }.execute();
+                    cursor.close();
+                }
 
-                            }else {
+                return isfav;
+            }
 
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                fav_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (aBoolean == true) {
+                            new AsyncTask<Void, Void, Integer>() {
+                                @Override
+                                protected Integer doInBackground(Void... voids) {
+
+                                    return getApplicationContext().getContentResolver().delete(MoviesContract.MoviesEntry.CONTENT_URI,
+                                            MoviesContract.MoviesEntry.COLUMN__MOVIES_ID + " = ?",
+                                            new String[]{Integer.toString((int) mMovies.getMovie_ID())}
+                                    );
+                                }
+
+                                @Override
+                                protected void onPostExecute(Integer integer) {
+                                    fav_btn.setImageResource(R.drawable.favsymboldark);
+                                    startActivity(getIntent());
+                                    finish();
+
+                                }
+                            }.execute();
+                        } else {
+                            if (mMovies != null) {
                                 new AsyncTask<Void, Void, Uri>() {
 
                                     @Override
@@ -282,47 +321,35 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                                         cv.put(MoviesContract.MoviesEntry.COLUMN__TITLE, mMovies.getTitle());
                                         cv.put(MoviesContract.MoviesEntry.COLUMN__OVERVIEW, mMovies.getOverView());
                                         cv.put(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE, mMovies.getRelease_Date());
-                                        cv.put(MoviesContract.MoviesEntry.COLUMN__REVIEW_AUTHOR_NAME, mReview.getAuthor());
-                                        cv.put(MoviesContract.MoviesEntry.COLUMN_REVIEW_CONTENT, mReview.getContent());
-                                        cv.put(MoviesContract.MoviesEntry.COLUMN_TRAILER_KEY, videoList.get(0).getKey());
                                         return getBaseContext().getContentResolver().insert(MoviesContract.MoviesEntry.CONTENT_URI, cv);
                                     }
 
                                     @Override
                                     protected void onPostExecute(Uri uri) {
                                         fav_btn.setImageResource(R.drawable.favsymbolred);
-                                        if (mToast != null) {
-                                            mToast.cancel();
-                                        }
-
-                                        mToast = Toast.makeText(getApplicationContext(), getString(R.string.added_to_fav), Toast.LENGTH_SHORT);
-                                        mToast.show();
-
+                                        startActivity(getIntent());
+                                        finish();
                                     }
                                 }.execute();
                             }
                         }
-                    }.execute();
-                }
+                    }
+                });
             }
-        });
+        }.execute();
 
     }
     /**
      * setup widgets
      */
     void init(){
-        poster_image_big = findViewById(R.id.detail_activity_iv);
+        poster_image_big = findViewById(R.id.detail_activity__iv);
         poster_image_small = findViewById(R.id.detail_activity_small_iv);
         movieTitle = findViewById(R.id.tv_movieName_Label);
         releaseDate = findViewById(R.id.tv_releaseDateValue);
         vote_average = findViewById(R.id.tv_vote_average);
         overView = findViewById(R.id.tv_overView);
-        //backIv = findViewById(R.id.back_iv);
-        //textViewName = findViewById(R.id.textViewName);
-        //trailer = findViewById(R.id.tv_trailer);
         fav_btn = findViewById(R.id.fav_btn);
-
 
     }
 
@@ -332,9 +359,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     public void setUpTrailerRecyclerView(){
 
-        if(videoList.size()==1){
 
-        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         mRecyclerViewTrailer.setLayoutManager(linearLayoutManager);
         mRecyclerViewTrailer.setHasFixedSize(true);
@@ -345,6 +370,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             trailerAdapter = new TrailerAdapter(this,videoList,this);
             mRecyclerViewTrailer.setAdapter(trailerAdapter);
         }
+
+
     }
 
     /**
@@ -405,8 +432,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                     if(!(trailer.getString("key").length()==0)){
                         keys.add(trailer.getString("key"));
                     }else {
-                        keys.add("-9E_Tcv8eJ8");
-                        trailerModel.setKey("-9E_Tcv8eJ8");
+                        //keys.add("-9E_Tcv8eJ8");
+                        //trailerModel.setKey("-9E_Tcv8eJ8");
                     }
                 }
 

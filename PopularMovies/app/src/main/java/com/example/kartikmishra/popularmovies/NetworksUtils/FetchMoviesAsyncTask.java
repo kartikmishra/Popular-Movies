@@ -33,7 +33,6 @@ public class FetchMoviesAsyncTask extends AsyncTask<String,Void,String> {
 
             String sortingCriteria = strings[0];
 
-
             Uri builtUri = Uri.parse(Constants.APIConstants.BASE_URL).buildUpon()
                     .appendPath(sortingCriteria)
                     .appendQueryParameter("api_key", Constants.APIConstants.THE_MOVIE_DB_API_KEY)

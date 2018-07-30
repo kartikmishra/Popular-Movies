@@ -10,7 +10,7 @@ public class MoviesContract {
     public static final String CONTENT_AUTHORITY = "com.example.kartikmishra.popularmovies";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    public static final String PATH_MOVIE = "movie";
+    public static final String PATH_MOVIE = "movies";
 
 
     public static final class MoviesEntry implements BaseColumns{
@@ -30,6 +30,7 @@ public class MoviesContract {
         public static final String COLUMN__TITLE = "title";
         public static final String COLUMN__OVERVIEW = "overview";
         public static final String COLUMN_RELEASE_DATE = "releaseDate";
+        public static String COLUMN_ISFAV="isFav";
         public static final String COLUMN__REVIEW_AUTHOR_NAME = "review_author_name";
         public static final String COLUMN_REVIEW_CONTENT = "review_content";
         public static final String COLUMN_TRAILER_KEY = "trailer_key";

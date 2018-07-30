@@ -17,6 +17,10 @@ public class Utility {
                 new String[] { Integer.toString(id) },   // selectionArgs
                 null    // sort order
         );
+        if(cursor==null){
+          return Integer.parseInt(null);
+        }
+
         int numRows = cursor.getCount();
         cursor.close();
         return numRows;

@@ -2,6 +2,8 @@ package com.example.kartikmishra.popularmovies.Adapters;
 
 import android.content.Context;
 
+import android.graphics.Color;
+import android.graphics.Movie;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
@@ -9,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 import com.example.kartikmishra.popularmovies.R;
@@ -19,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Random;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder>
 {
@@ -28,10 +33,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
 
     private List<Movies> moviesList = new ArrayList<>();
     private Context mContext;
-
+    RelativeLayout relativeLayout;
 
 
     private ImageView moviesImageView;
+    private TextView movieName;
 
     private  Context context;
     public MoviesAdapter(Context context,List<Movies> moviesList,ListItemClickListener listener) {
@@ -49,6 +55,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     public interface ListItemClickListener{
         void onListItemClick(int clickedItemIndex);
     }
+
+
 
 
 
@@ -73,7 +81,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
 
         Movies movies = moviesList.get(position);
         Picasso.with(context).load(MainActivity.images.get(position)).into(moviesImageView);
-
+        movieName.setText(MainActivity.list.get(position).getTitle());
+        int[] androidColors = MainActivity.mContext.getResources().getIntArray(R.array.androidcolors);
+        int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
+        relativeLayout.setBackgroundColor(randomAndroidColor);
+        relativeLayout.animate();
         holder.setIsRecyclable(false);
     }
 
@@ -89,6 +101,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
             super(itemView);
 
             moviesImageView = itemView.findViewById(R.id.movies_iv);
+            movieName = itemView.findViewById(R.id.movie_name);
+            relativeLayout= itemView.findViewById(R.id.relLayout_text_main);
+
             itemView.setOnClickListener(this);
         }
 

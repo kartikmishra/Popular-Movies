@@ -9,9 +9,12 @@ import android.preference.PreferenceManager;
 
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -27,30 +30,8 @@ public class SettingsActivity  extends PreferenceActivity implements Preference.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-//        ActionBar actionBar = this.getActionBar();
-//        if(actionBar!=null){
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//        }
         addPreferencesFromResource(R.xml.pref_general);
         bindPrefernenceSummaryToValue(findPreference(getString(R.string.pref_sorting_criteria_key)));
-
-
-
-
-
-
-        //homeIv = findViewById(R.id.home_iv);
-//        homeIv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(SettingsActivity.this,MainActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
-
-
 
       
     }

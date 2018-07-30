@@ -67,7 +67,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     public void onBindViewHolder(@NonNull TrailerAdapterViewHolder holder, int position) {
 
 
-        Videos videos = mTrailers.get(position);
         String yt_thumbnail_url = "http://img.youtube.com/vi/" + DetailActivity.keys.get(position) + "/0.jpg";
         Picasso.with(mContext).load(yt_thumbnail_url).into(trailer_iv);
 

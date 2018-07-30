@@ -49,8 +49,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
     public void onBindViewHolder(@NonNull ReviewAdapterViewHolder holder, int position) {
 
         if(DetailActivity.reviewsList.size()>0){
-            String firstName = DetailActivity.reviewsList.get(position).getAuthor().substring(0);
-            author_first_name.setText(firstName);
+
+            String firstName = DetailActivity.reviewsList.get(position).getAuthor().substring(0,1);
+            if(!firstName.equals(firstName.toUpperCase())){
+               firstName= firstName.toUpperCase();
+                author_first_name.setText(firstName);
+            }
+            else {
+                author_first_name.setText(firstName);
+            }
+
             author_full_name.setText("A Review By "+DetailActivity.reviewsList.get(position).getAuthor());
             content.setText(DetailActivity.reviewsList.get(position).getContent());
 
@@ -68,7 +76,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
         public ReviewAdapterViewHolder(View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.review_circle_iv);
             author_first_name = itemView.findViewById(R.id.tv_review_author_name);
             author_full_name = itemView.findViewById(R.id.textView_review_big_label);
             content = itemView.findViewById(R.id.content_review);

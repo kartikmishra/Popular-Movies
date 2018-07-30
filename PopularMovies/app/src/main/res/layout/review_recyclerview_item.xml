@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -18,70 +17,74 @@
         android:layout_marginStart="5dp"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="5dp"
-        app:cardElevation="20dp">
+        app:cardElevation="10dp">
 
 
-        <android.support.constraint.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/review_circle_iv"
+            <RelativeLayout
                 android:layout_width="40dp"
-
                 android:layout_height="40dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/light_green"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:id="@+id/relLayout1"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/red">
 
-            </de.hdodenhof.circleimageview.CircleImageView>
 
-            <TextView
-                android:id="@+id/textView_review_big_label"
+                <TextView
+                    android:id="@+id/tv_review_author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="L"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:text="A Review By Law"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                app:layout_constraintStart_toEndOf="@+id/review_circle_iv"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_toEndOf="@+id/relLayout1"
+                android:layout_marginStart="10dp"
+                android:id="@+id/relativlayout2">
+                <TextView
+                    android:id="@+id/textView_review_big_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="A Review By Law"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
 
-            <TextView
-                android:id="@+id/content_review"
-                android:layout_width="304dp"
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:autoSizeTextType="uniform"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView_review_big_label"
-                app:layout_constraintTop_toBottomOf="@+id/textView_review_big_label"
-                app:layout_constraintVertical_bias="0.0" />
+                android:layout_toEndOf="@+id/relLayout1"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="10dp">
+                <TextView
+                    android:id="@+id/content_review"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
-            <TextView
-                android:id="@+id/tv_review_author_name"
-                android:layout_width="13dp"
-                android:layout_height="15dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="L"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@id/review_circle_iv"
-                app:layout_constraintEnd_toEndOf="@+id/review_circle_iv"
-                app:layout_constraintHorizontal_bias="0.636"
-                app:layout_constraintStart_toStartOf="@+id/review_circle_iv"
-                app:layout_constraintTop_toTopOf="@+id/review_circle_iv"
-                app:layout_constraintVertical_bias="0.411" />
+            </RelativeLayout>
 
 
-        </android.support.constraint.ConstraintLayout>
+
+
+
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

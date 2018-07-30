@@ -37,6 +37,7 @@ public class MoviesContentProvider extends ContentProvider {
 
         Context context = getContext();
         mMoviesDbHelper = new MoviesDbHelper(context);
+
         return true;
     }
 
@@ -87,11 +88,10 @@ public class MoviesContentProvider extends ContentProvider {
             case MOVIES:
 
                 long _id = db.insert(MoviesContract.MoviesEntry.TABLE_NAME,null,values);
-                if(_id<0){
-                    throw  new android.database.SQLException("Failed to insert row into "+ uri);
-                }else {
-
+                if(_id>0){
                     returnUri = ContentUris.withAppendedId(MoviesContract.MoviesEntry.CONTENT_URI,_id);
+                }else {
+                    throw  new android.database.SQLException("Failed to insert row into "+ uri);
                 }
                 break;
                 default:
@@ -143,6 +143,7 @@ public class MoviesContentProvider extends ContentProvider {
         }
 
         return rowsUpdated;
-    }
+     }
+
 
 }

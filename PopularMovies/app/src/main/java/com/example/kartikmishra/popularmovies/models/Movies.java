@@ -1,10 +1,13 @@
 package com.example.kartikmishra.popularmovies.models;
 
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.kartikmishra.popularmovies.Constants;
+import com.example.kartikmishra.popularmovies.UserInterface.MainActivity;
+import com.example.kartikmishra.popularmovies.data.MoviesContract;
 
 public class Movies implements Parcelable {
 
@@ -15,6 +18,7 @@ public class Movies implements Parcelable {
   String overView;
   String release_Date;
   String reviews;
+  int fav;
 
     public Movies() {
     }
@@ -27,6 +31,15 @@ public class Movies implements Parcelable {
         this.overView = overView;
         this.release_Date = release_Date;
         this.reviews = reviews;
+    }
+
+    public Movies(Cursor cursor){
+        this.movie_ID = cursor.getLong(MainActivity.COL_MOVIE_ID);
+        this.vote_average = cursor.getDouble(MainActivity.COL_RATING);
+        this.title = cursor.getString(MainActivity.COL_TITLE);
+        this.poster_path = cursor.getString(MainActivity.COL_IMAGE);
+        this.overView = cursor.getString(MainActivity.COL_OVERVIEW);
+        this.release_Date = cursor.getString(MainActivity.COL_DATE);
     }
 
 
