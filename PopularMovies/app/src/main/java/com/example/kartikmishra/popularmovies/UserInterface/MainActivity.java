@@ -34,10 +34,12 @@ import android.widget.Toast;
 import com.example.kartikmishra.popularmovies.Adapters.MoviesAdapter;
 import com.example.kartikmishra.popularmovies.Constants;
 import com.example.kartikmishra.popularmovies.NetworksUtils.FetchMoviesAsyncTask;
+import com.example.kartikmishra.popularmovies.NetworksUtils.FetchTrailersAsyncTask;
 import com.example.kartikmishra.popularmovies.R;
 import com.example.kartikmishra.popularmovies.Settings.SettingsActivity;
 import com.example.kartikmishra.popularmovies.data.MoviesContract;
 import com.example.kartikmishra.popularmovies.models.Movies;
+import com.example.kartikmishra.popularmovies.models.Videos;
 
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -55,14 +57,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     private RecyclerView mRecyclerView;
 
     public static List<Movies> list = null;
-    private ProgressDialog progressDialog;
     public static   MoviesAdapter moviesAdapter;
     private TextView networkConnectionTv;
     private Button tryNetworkConnection;
-    private  String poster_path;
-
-    private Movies mMovies;
-    Movies movieObj;
     public static Context mContext;
 
 
@@ -159,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         super.onSaveInstanceState(outState);
     }
 
+
+
     /**
      * Utility class to check the width and height of screen and place number of columns
      */
@@ -223,22 +222,25 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
        sortingCriteria = sharedPrefs.getString(getString(R.string.pref_sorting_criteria_key),getString(R.string.pref_sorting_criteria_default_value));
 
-        if(isOnline()){
+       if(Constants.APIConstants.THE_MOVIE_DB_API_KEY!=null){
+           if(isOnline()){
 
-            if(sortingCriteria.contentEquals("fav")){
-                favMoviesUpdateTask();
+               if(sortingCriteria.contentEquals("fav")){
+                   favMoviesUpdateTask();
 
-            }
-            else if(sortingCriteria.contentEquals("popular") || sortingCriteria.contentEquals("top_rated")) {
-                new FetchMoviesAsyncTask().execute(sortingCriteria, null);
-            }
+               }
+               else if(sortingCriteria.contentEquals("popular") || sortingCriteria.contentEquals("top_rated")) {
+                   new FetchMoviesAsyncTask().execute(sortingCriteria, null);
+               }
 
-        }
+           }
 
 
-        if(sortingCriteria.contentEquals("fav")){
-            favMoviesUpdateTask();
-        }
+           if(sortingCriteria.contentEquals("fav")){
+               favMoviesUpdateTask();
+           }
+       }
+
 
     }
 

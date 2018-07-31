@@ -4,14 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 
-import android.content.SharedPreferences;
+
 import android.database.Cursor;
 import android.net.ParseException;
 import android.net.Uri;
 import android.os.AsyncTask;
-
-import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,39 +28,28 @@ import android.widget.Toast;
 
 
 
-import com.example.kartikmishra.popularmovies.Adapters.MoviesAdapter;
+
 import com.example.kartikmishra.popularmovies.Adapters.ReviewAdapter;
 import com.example.kartikmishra.popularmovies.Adapters.TrailerAdapter;
 import com.example.kartikmishra.popularmovies.Constants;
-import com.example.kartikmishra.popularmovies.NetworksUtils.FetchMoviesAsyncTask;
-import com.example.kartikmishra.popularmovies.NetworksUtils.HttpHandler;
+
+import com.example.kartikmishra.popularmovies.NetworksUtils.FetchReviewsAsyncTask;
+import com.example.kartikmishra.popularmovies.NetworksUtils.FetchTrailersAsyncTask;
+
 import com.example.kartikmishra.popularmovies.R;
 import com.example.kartikmishra.popularmovies.data.MoviesContract;
 import com.example.kartikmishra.popularmovies.models.Movies;
 import com.example.kartikmishra.popularmovies.models.Reviews;
 import com.example.kartikmishra.popularmovies.models.Videos;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-public class DetailActivity extends AppCompatActivity implements TrailerAdapter.ListItemClickListener {
+
+public class DetailActivity extends AppCompatActivity implements TrailerAdapter.ListItemClickListener,FetchTrailersAsyncTask.OnTaskCompleted,
+        FetchReviewsAsyncTask.OnTaskCompleted{
     private static final String TAG = "DetailActivity";
 
     private ImageView poster_image_big;
@@ -102,6 +88,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(DetailActivity.this,MainActivity.class);
                 finish();
                 return;
             }
@@ -112,10 +99,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         init();
 
         mMovies = new Movies();
-        String sortingCriteria = intent.getStringExtra("sorting");
-        if(sortingCriteria.contentEquals("fav")){
-            fav_btn.setVisibility(View.INVISIBLE);
-        }
 
         int moviePosition1 = intent.getIntExtra("movies_position", 0);
         mMovies = MainActivity.list.get(moviePosition1);
@@ -126,6 +109,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         setUpTrailerRecyclerView();
         setUpReviewRecyclerView();
 
+        FetchTrailersAsyncTask asyncTask = new FetchTrailersAsyncTask(DetailActivity.this);
+        asyncTask.execute(String.valueOf(mMovies.getMovie_ID()));
+
+        FetchReviewsAsyncTask asyncTask1 = new FetchReviewsAsyncTask(DetailActivity.this);
+        asyncTask1.execute(String.valueOf(mMovies.getMovie_ID()));
 
         TextView toolbarName = findViewById(R.id.tv_detail_toolbar_name);
         toolbarName.setText(mMovies.getTitle());
@@ -164,11 +152,18 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         overView.setText(mMovies.getOverView());
 
+        setUpFavBtnState();
+
+        setUpFavButton();
 
 
+    }
 
 
-
+    /**
+     * Setting up fav button state
+     */
+    public void setUpFavBtnState(){
         new  AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... voids) {
@@ -213,32 +208,14 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             }
         }.execute();
 
-
-
-        setUpFavButton();
-
-
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(mMovies!=null){
-            new fetchTrailerAsyncTask().execute(String.valueOf(mMovies.getMovie_ID()));
-
-            new fetchReviewTask().execute(String.valueOf(mMovies.getMovie_ID()));
-           // adapter.notifyDataSetChanged();
-        }
-
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
+    public void onBackPressed() {
+        Intent intent = new Intent(DetailActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
-
 
     /**
      * Setting Up Fav Button Here
@@ -404,170 +381,38 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         startActivity(intent);
     }
 
+
     /**
-     * Fetching Trailer from API
+     *
+     * @param reviews
+     * Getting reviews from class FetchReviewsAsyncTask
      */
 
-    public class fetchTrailerAsyncTask extends AsyncTask<String,Void,List<Videos>>{
-
-
-
-        private List<Videos> getDataFromJson(String jsonStr) throws JSONException{
-            videoList.clear();
-            keys.clear();
-            JSONObject trailerJson = new JSONObject(jsonStr);
-            JSONArray trailerArray = trailerJson.getJSONArray("results");
-
-            List<Videos> results = new ArrayList<>();
-            for(int i = 0; i < trailerArray.length(); i++) {
-                JSONObject trailer = trailerArray.getJSONObject(i);
-                // Only show Trailers which are on Youtube
-                if (trailer.getString("site").contentEquals("YouTube")) {
-                    Videos trailerModel = new Videos();
-                    trailerModel.setKey(trailer.getString("key"));
-                    trailerModel.setName(trailer.getString("name"));
-                    results.add(trailerModel);
-                    videoList.add(trailerModel);
-                    if(!(trailer.getString("key").length()==0)){
-                        keys.add(trailer.getString("key"));
-                    }else {
-                        //keys.add("-9E_Tcv8eJ8");
-                        //trailerModel.setKey("-9E_Tcv8eJ8");
-                    }
-                }
-
-
-            }
-
-            return results;
-        }
-        @Override
-        protected List<Videos> doInBackground(String... strings) {
-            if(strings.length==0){
-                return null;
-            }
-
-            try {
-                Uri uri = Uri.parse(Constants.APIConstants.BASE_URL).buildUpon()
-                        .appendPath(strings[0])
-                        .appendPath(Constants.APIConstants.VIDEO_PARAM)
-                        .appendQueryParameter(Constants.APIConstants.API_KEY_PARAM, Constants.APIConstants.THE_MOVIE_DB_API_KEY)
-                        .build();
-
-                String response = getJsonString(uri);
-                return getDataFromJson(response);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-            return null;
-        }
-
-        private String getJsonString(Uri uri) {
-            String jsonStr = null;
-
-            try {
-                String trailerString = uri.toString();
-                HttpHandler sh = new HttpHandler();
-                jsonStr = sh.makeServiceCall(trailerString);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return jsonStr;
-        }
-
-        @Override
-        protected void onPostExecute(List<Videos> videos) {
-
-            if(videos!=null) {
-                if (videos.size() > 0) {
-                    keys.get(0);
-                    trailerAdapter.notifyDataSetChanged();
-                }
-            }
-
+    @Override
+    public void onReviewTaskCompleted(List<Reviews> reviews) {
+        if(reviews!=null && reviews.size()>0){
+            mReview = reviews.get(0);
+            reviewAdapter.notifyDataSetChanged();
 
         }
 
     }
 
+    /**
+     *
+     * @param response
+     * Getting trailers from class FetchTrailerAsyncTask
+     */
 
-    public class fetchReviewTask extends AsyncTask<String,Void,List<Reviews>>{
-
-
-
-        private List<Reviews> getDataFromJson(String jsonStr) throws JSONException{
-
-            reviewsList.clear();
-            JSONObject reviewObject = new JSONObject(jsonStr);
-            JSONArray reviewArray = reviewObject.getJSONArray("results");
-
-            List<Reviews> results = new ArrayList<>();
-
-                for(int i=0;i<reviewArray.length();i++){
-                    JSONObject review = reviewArray.getJSONObject(i);
-                    Reviews reviewsModel = new Reviews();
-
-                    if(review.length()>0){
-                        reviewsModel.setAuthor(review.getString("author"));
-                        reviewsModel.setContent(review.getString("content"));
-                        reviewsModel.setReviewId(review.getString("id"));
-                        results.add(reviewsModel);
-                        reviewsList.add(reviewsModel);
-                    }
-                }
-
-            return results;
-        }
-
-        @Override
-        protected List<Reviews> doInBackground(String... strings) {
-
-            if(strings.length==0){
-                return null;
-            }
-
-            try {
-
-                Uri uri = Uri.parse(Constants.APIConstants.BASE_URL).buildUpon()
-                        .appendPath(strings[0])
-                        .appendPath(Constants.APIConstants.REVIEW_PARAM)
-                        .appendQueryParameter(Constants.APIConstants.API_KEY_PARAM, Constants.APIConstants.THE_MOVIE_DB_API_KEY)
-                        .build();
-
-                String response = getJsonString(uri);
-                return getDataFromJson(response);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-
-        private String getJsonString(Uri uri) {
-            String jsonStr = null;
-
-            try {
-                String trailerString = uri.toString();
-                HttpHandler sh = new HttpHandler();
-                jsonStr = sh.makeServiceCall(trailerString);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return jsonStr;
-        }
-
-        @Override
-        protected void onPostExecute(List<Reviews> reviews) {
-
-            if(reviews!=null && reviews.size()>0){
-                mReview = reviews.get(0);
-                reviewAdapter.notifyDataSetChanged();
-
+    @Override
+    public void onTrailersTaskCompleted(List<Videos> response) {
+        if(response!=null){
+            if(response.size()>0){
+                keys.get(0);
+                trailerAdapter.notifyDataSetChanged();
             }
         }
     }
+
 
 }
