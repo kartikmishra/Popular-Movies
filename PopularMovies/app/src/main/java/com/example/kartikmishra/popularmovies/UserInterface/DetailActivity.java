@@ -89,6 +89,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailActivity.this,MainActivity.class);
+                startActivity(intent);
                 finish();
                 return;
             }
@@ -224,8 +225,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     public void setUpFavButton() {
         fav_btn.setImageResource(R.drawable.favsymboldark);
-
-        boolean[] isFav={false};
 
        new AsyncTask<Void,Void,Boolean>() {
 
