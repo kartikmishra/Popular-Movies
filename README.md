@@ -12,15 +12,15 @@ Some of the fucntionality in this app:-<br/>
 6.Uses CONTENT PROVIDER to store the favourite movies.
 
 
-<div align="center">
-    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS4.png" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS5.png" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS6.png" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS7.png" width="400px"</img> 
+<div align="left">
+    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS4.png" width="300px"</img> 
+</div><br/>
+<div align="left">
+    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS5.png" width="300px"</img> 
+</div><br/>
+<div align="left">
+    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS6.png" width="300px"</img> 
+</div><br/>
+<div align="left">
+    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS7.png" width="300px"</img> 
 </div>
