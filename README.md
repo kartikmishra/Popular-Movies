@@ -12,6 +12,15 @@ Some of the fucntionality in this app:-<br/>
 6.Uses CONTENT PROVIDER to store the favourite movies.
 
 
-![alt text](SS4.png) ![alt text](SS5.png "Detail page to see the overview,release date,reviews,trailers,etc" )
-![alt text](SS6.png ) ![alt text](SS7.png )
-
+<div align="center">
+    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS4.png" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS5.png" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS6.png" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="https://github.com/kartikmishra/Popular-Movies/blob/master/SS7.png" width="400px"</img> 
+</div>
