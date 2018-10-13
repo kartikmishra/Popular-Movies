@@ -1,9 +1,9 @@
 # Popular-Movies
-Popular movies app lets you search all the popular and  the top rated movies and you can also get the release date,overview etc.<br/><br/><br/><br/>
+Popular movies app lets you search all the popular and  the top rated movies and you can also get the release date,overview etc.<br/><br/>
 You can search for reviews given by the user and you can also see the trailers of the particular movie.<br/><br/>
 
-Some of the fucntionality in this app:-<br/><br/><br/>
-!----------------------------------------------------!<br/>
+Some of the fucntionality in this app:-<br/>
+----------------------------------------------------
 1.Uses API to get the movies.<br/>
 2.Used HTTP URL CONNECTION  to form the connection.<br/>
 3.Picasso library is used to show the posters.<br/>
